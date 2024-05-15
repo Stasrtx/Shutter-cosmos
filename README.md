@@ -1,1 +1,2 @@
 # Shutter-cosmos
+Это шутер
