@@ -49,11 +49,11 @@ window = display.set_mode((win_width , win_height))
 display.set_caption('Космос')
 background = transform.scale(image.load('galaxy.jpg') , (win_width , win_height))
 hero = Player('rocket.png' , 250, 450, 50, 50, 5)
-enemy1 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5)
-enemy2 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5)
-enemy3 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5)
-enemy4 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5)
-enemy5 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5)
+enemy1 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+enemy2 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+enemy3 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+enemy4 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+enemy5 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
 bulets = sprite.Group()
 monsters = sprite.Group()
 monsters.add(enemy1)
@@ -73,29 +73,43 @@ while run:
             if e.key == K_SPACE:
                 fire.play()
                 hero.fire()
-    if sprite.groupcollide(bulets, monsters, True, True):
-        win += 1
-        monsters.add(Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5))
-    if sprite.spritecollide(hero, monsters, True):
-        monsters.add(Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5))
-        run = False
-    if pr >= 20:
-        run = False
-    wintop = text.render('Счет:' + str(win) , True , (255, 255, 255))
-    prtop = text2.render('Пропущено:' + str(pr) , True , (255, 255, 255))
-    window.blit(background , (0 , 0))
-    window.blit(wintop, (0, 0))
-    window.blit(prtop, (0, 25))
-    monsters.draw(window)
-    monsters.update()
-    hero.update()
-    hero.draw()
-    bulets.update()
-    bulets.draw(window)
-    display.update()
-    clock.tick(FPS)
-    if run == False:
-        run = True
-        sleep(5)
+    if not finish:
+        if sprite.groupcollide(bulets, monsters, True, True):
+            win += 1
+            monsters.add(Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5))
+        if sprite.spritecollide(hero, monsters, True):
+            monsters.add(Enemy('ufo.png', randint(50, 650), 0, 50, 50, 5))
+            finish = True
+        if pr >= 20:
+            finish = True
+        wintop = text.render('Счет:' + str(win) , True , (255, 255, 255))
+        prtop = text2.render('Пропущено:' + str(pr) , True , (255, 255, 255))
+        window.blit(background , (0 , 0))
+        window.blit(wintop, (0, 0))
+        window.blit(prtop, (0, 25))
+        monsters.draw(window)
+        monsters.update()
+        hero.update()
+        hero.draw()
+        bulets.update()
+        bulets.draw(window)
+        display.update()
+        clock.tick(FPS)
+    else:
+        finish = False
         pr = 0
         win = 0
+        for b in bulets:
+            b.kill()
+        for b in monsters:
+            b.kill()
+        enemy1 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+        enemy2 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+        enemy3 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+        enemy4 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+        enemy5 = Enemy('ufo.png', randint(50, 650), 0, 50, 50, randint(1, 5))
+        monsters.add(enemy1)
+        monsters.add(enemy2)
+        monsters.add(enemy3)
+        monsters.add(enemy4)
+        monsters.add(enemy5)
